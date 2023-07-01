@@ -60,6 +60,7 @@ class WakeWordDetector:
         self.speech = TextToSpeechService()#self.input_device_index)
 
         self._init_audio_stream()
+<<<<<<< Updated upstream
 
     def _init_audio_stream(self):
         self.audio_stream = self.pa.open(
@@ -70,6 +71,27 @@ class WakeWordDetector:
             frames_per_buffer=self.handle.frame_length,
         )
         # input_device_index=self.input_device_index)
+=======
+    # def _init_audio_stream(self):
+    #     self.audio_stream = self.pa.open(
+    #         rate=self.handle.sample_rate,
+    #         channels=1,
+    #         format=pyaudio.paInt16,
+    #         input=True,
+    #         input_device_index=self.input_device_index,  # specify the input device index
+    #         frames_per_buffer=self.handle.frame_length,
+    #     )
+>>>>>>> Stashed changes
+
+
+    def _init_audio_stream(self):
+        self.audio_stream = self.pa.open(
+            rate=self.handle.sample_rate,
+            channels=1,
+            format=pyaudio.paInt16,
+            input=True,
+            frames_per_buffer=self.handle.frame_length,
+        )
 
     def run(self):
         try:
