@@ -18,33 +18,25 @@ if "openai_org" in config:
 class WakeWordDetector:
     def __init__(self, library_path, model_path, keyword_paths):
         self.chat_gpt_service = ChatGPTService()
-        # load access key from config
         pv_access_key = config["pv_access_key"]
 
         self.handle = pvporcupine.create(
             keywords=["picovoice"],
             access_key=pv_access_key,
-            # library_path=library_path,
-            # model_path=model_path,
-            # keyword_paths=keyword_paths,
             sensitivities=[1],
         )
 
         self.pa = pyaudio.PyAudio()
-        # init listener, use values from config or default
         self.listener = InputListener(
             config["silence_threshold"] if "silence_threshold" in config else 75,
             config["silence_duration"] if "silence_duration" in config else 1.5,
         )
-
-        # get from config, or default
         sound_card_name = (
             config["sound_card_name"]
             if "sound_card_name" in config
             else "seeed-2mic-voicecard"
         )
 
-        # Find the device index of the sound card
         print("Looking for sound card...")
         for i in range(self.pa.get_device_count()):
             device_info = self.pa.get_device_info_by_index(i)
@@ -56,19 +48,28 @@ class WakeWordDetector:
         else:
             raise Exception("Could not find sound device")
 
-        self.speech = TextToSpeechService()#self.input_device_index)
+        self.speech = TextToSpeechService()
 
         self._init_audio_stream()
-
     def _init_audio_stream(self):
         self.audio_stream = self.pa.open(
             rate=self.handle.sample_rate,
             channels=1,
             format=pyaudio.paInt16,
             input=True,
+            input_device_index=self.input_device_index,  # specify the input device index
             frames_per_buffer=self.handle.frame_length,
         )
-        # input_device_index=self.input_device_index)
+
+
+    # def _init_audio_stream(self):
+    #     self.audio_stream = self.pa.open(
+    #         rate=self.handle.sample_rate,
+    #         channels=1,
+    #         format=pyaudio.paInt16,
+    #         input=True,
+    #         frames_per_buffer=self.handle.frame_length,
+    #     )
 
     def run(self):
         try:
@@ -97,10 +98,7 @@ class WakeWordDetector:
 
 
                     print("Playing response...")
-                    # play response
                     self.speech.speak(response)
-
-                    # delete file
                     os.remove(audio_path)
                     self._init_audio_stream()
 

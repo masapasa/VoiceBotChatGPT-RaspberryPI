@@ -1,0 +1,11 @@
+curl --location 'https://play.ht/api/v2/tts' \
+--header 'Content-Type: application/json' \
+--header 'accept: text/event-stream' \
+--header 'X-USER-ID: YVMb6FW4ixZeRvWK9wejDiVErR43' \
+--header 'Location: /api/v2/tts/s3://voice-cloning-zero-shot/cd1e0cf3-0106-4dd2-9406-6ccea4d70cf2/kitt-voice/manifest.json' \
+--header 'Authorization: Bearer 07b28c958ac74f41812f57345488f96a' \
+--data '{
+    "speed": 1,
+    "text": "This is our response",
+    "voice": "s3://voice-cloning-zero-shot/cd1e0cf3-0106-4dd2-9406-6ccea4d70cf2/kitt-voice/manifest.json"
+}'
