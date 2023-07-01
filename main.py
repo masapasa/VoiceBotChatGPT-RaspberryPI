@@ -6,6 +6,7 @@ import struct
 import os
 import pyaudio
 import openai
+from prompt import prompt_template
 
 from tts_service import TextToSpeechService
 
